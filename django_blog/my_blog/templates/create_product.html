@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}
+KTG family
+{% endblock %}
+
+{% block body %}
+<div class="container col-lg-6 col-md-10 col-sm-12 shadow mt-5 mb-5">
+<form method="post" enctype="multipart/form-data" class="p-3">
+    <h3>Upload Bike</h3>
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label class="form-label">Category</label>
+      <select class="form-control" name="category" required>
+        {% for c in category %}
+        <option value="{{c.id}}" class="text-uppercase">{{c.name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Bike Name</label>
+      <input type="text" class="form-control" name="name" placeholder="Bike name..">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Bike Model</label>
+      <input type="text" class="form-control" name="model_date" placeholder="Bike model..">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Bike Price</label>
+      <input type="text" class="form-control" name="price" placeholder="Bike price..">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Thumbnail Photo</label>
+      <input class="form-control" type="file" name="thumbnail" accept="image/*" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Bike Photos</label>
+      <input class="form-control" type="file" name="images" accept="image/*" multiple>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Description</label>
+        <textarea class="form-control" name="description"></textarea>
+    </div>
+    <button type="submit" class="btn btn-dark">Upload</button>
+    <a href="{% url 'add_category' %}" class="btn btn-outline-dark">Add Category</a>
+</form>
+</div>
+{% endblock %}

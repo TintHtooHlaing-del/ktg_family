@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+<form class="" method="GET" id="myForm">
+  {% csrf_token %}
+  <div class="container-fluid col-10 shadow mt-5">
+      <h2 class="text-center pt-4">Bike Details</h2><br>
+      <div class="container">
+      <div class="row justify-content-center pb-5">
+        <div class="col-lg-6 col-md-8 col-sm-12 mt-2">
+          <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              {% for i in images %}
+              <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <div class="d-flex justify-content-center col-12  bg-secondary" style="height: 400px;">
+                  <img src="{{ i.image.url }}" style="height: 100%; width: auto;">
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="description col-lg-6 col-md-4 col-sm-12 mt-2">
+          <div>
+            <h3>{{product.name}}</h3>
+            <h5>Price - {{product.price}} သိန်း</h5>
+            <h5>Model - {{product.model_date}}</h5>
+            <h5>Brand - <span class="text-uppercase">{{product.category}}</span></h5>
+            <input type="number" class="card-text" name="qty" value="1" min="1" max="10" style="display:none;" />
+          </div>
+
+          <div>
+            <p class="text-left">
+              {{product.description}}
+            </p>
+          </div>
+
+          <div class="description-text">
+          <button onclick="submitForm('addToCart')" type="submit" class="btn btn-dark" type="submit" style="font-weight: bold;">Favourite</button>
+
+          {% if product.user_id == user.id %}
+          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Delete
+          </button>
+          {% endif %}
+          </div>
+
+          </div>
+        </div>
+        <!-- Display link to another product -->
+        {% if another_product %}
+        <div style="display: flex; justify-content: right;">
+          <a class="btn btn-outline-dark shadow mt-2 mb-3" href="{% url 'product_details' id=another_product.id %}">Next Bike >></a>
+        </div>
+        {% endif %}
+      </div>
+</div>
+</div>
+
+
+<!-- Display related products -->
+  <h2 class="col-10 mt-5 mb-2 m-auto text-center">Related Bikes in <span class="text-uppercase">{{ product.category.name }}</span></h2>
+
+        <div class="row col-12 m-auto d-flex justify-content-center ml-0">
+        {% if related_products %}   
+        {% for related_product in related_products %}
+        <div class="card col-lg-2 col-md-2 col-sm-4 p-2 m-2 ml-0 shadow">
+        {% if related_product.thumbnail %}
+          <a href="{% url 'product_details' related_product.id %}" style="text-decoration: none; color: dark;">
+            <img src="{{related_product.thumbnail.url}}" class="card-img-top" alt="...">
+          </a>
+        {% endif %}
+          <div class="card-body">
+            <a href="{% url 'product_details' related_product.id %}" style="text-decoration: none; color: dark;">
+              <h5 class="card-title text-uppercase text-dark">{{related_product.name}}</h5>              
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+        {% else %}
+            <h4 class="col-10 text-center mt-5 mb-5 m-auto">No Results Found</h4>
+        {% endif %}
+        </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-light">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Deleting Bike</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body bold">
+        <p>Are you sure want to delete the bike?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <a class="btn btn-dark" style="font-weight: bold;" href="{% url 'delete_product' product.id %}">
+         Yes, I'm.
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+</form>
+
+<script>
+    function submitForm(action){
+        form = document.getElementById('myForm')
+        if(action === 'addToCart'){
+            form.action = "/product/add_favourite/{{product.id}}/"
+        }
+        // else if(action === 'addToCart'){
+        //     form.action = "/product/addtocart/{{product.id}}/"
+        // }
+    }
+
+</script>
+
+
+{% endblock %}

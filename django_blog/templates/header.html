@@ -1,0 +1,122 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg bg-dark shadow">
+  <div class="container-fluid">
+    <a class="navbar-brand text-light pt-2 pb-2" style="font-size: 30px; font-weight: bold" href="{% url 'product_list' %}">
+    KTG Family
+    </a>
+    <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active text-light" aria-current="page" href="{% url 'product_list' %}">Home</a>
+        </li>
+        
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link text-light"  data-bs-toggle="offcanvas" href="#userprofile">Profile</a>
+        </li>
+        {% endif %}
+
+        {% if user.is_authenticated and user.is_staff %}
+        <li class="nav-item">
+          <a class="nav-link active text-light" aria-current="page" href="{% url 'create_product' %}">Create</a>
+        </li>
+
+        {% endif %}
+
+
+        <li class="nav-item">
+        {% if user.is_authenticated %}
+          <a class="nav-link text-light"  data-bs-toggle="modal" href="#logout"></a>
+        {% else %}
+          <a class="nav-link text-light" href="/login/">Login</a>     
+        {% endif %}
+        </li>
+
+        <li class="nav-item">
+        <!-- {% if user.is_authenticated %}
+          <a class="nav-link text-light"  data-bs-toggle="modal" href="#logout">Logout</a>
+        {% else %}
+          <a class="nav-link text-light" href="/login/">Login</a>     
+        {% endif %} -->
+        </li>
+      </ul>
+      <a href="{% url 'favourite_product' %}" class="border pt-1 pb-1 text-center text-light nav-link" style="width: 115px;
+      "><span style="font-weight: bold;" class="p-1">Favourites</span> <span class="badge bg-danger p-1">{{count}}</span></h6></a>
+    </div>
+  </div>
+</nav>
+
+<!-- profile -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="userprofile">
+  <div class="offcanvas-header bg-dark">
+    <h5 class="offcanvas-title text-light" id="offcanvasExampleLabel">{{user.username}}'s Profile</h5>
+    <button type="button" class="btn-light-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body shadow">
+    <div>
+      <!-- {% if user.image %}
+      <img src="..." class="img-thumbnail rounded" alt="..." class="m-auto">
+      {%  endif %}-->
+      <div class="d-flex justify-content-center mt-3 mb-1">
+        <img src="{% static 'images/profile.png' %}" class="" style="border-radius: 50%; width:150px; height: 150px;">
+        
+      </div>
+      <h5 class="text-center">{{user.username}}</h5><hr>
+      <p class="text-center">
+        {{user.email}}<br><hr>
+        {% if user.is_authenticated and user.is_staff %}
+            <a href="{% url 'create_product' %}" class="nav-link text-center">Create</a><hr>
+        {% else %}
+            <a href="{% url 'favourite_product' %}" class="nav-link text-center">Favourites</a><hr>
+        {% endif %}
+
+      </p>
+      <p class="text-center"></p>
+    </div>
+    <div class="coi-12 text-center">
+      <a class="btn btn-dark text-light"  data-bs-toggle="modal" href="#logout">Logout</a>
+      
+    </div>
+  </div>
+</div>
+
+<!-- logout -->
+<div class="modal fade" id="logout" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Logout</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label>Are you sure want to logout?</label>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
+        <a class="btn btn-dark" href="/logout/">Yes, I'm</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- logout -->
+<div class="modal fade" id="logout" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Logout</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label>Are you sure want to logout?</label>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
+        <a class="btn btn-dark" href="/logout/">Yes, I'm</a>
+      </div>
+    </div>
+  </div>
+</div>
